@@ -95,8 +95,9 @@ testpaths = [
     "tests/utils/test_validation.py",
     "tests/test_config.py",
     "tests/components/modules/test_incomemode.py",
-    "tests/test_record.py",
-    "tests/ADD_THIS_ONE_LATER.py"
+    "tests/managers/test_person.py",
+    "ADD_LATER_!_!"
+
 ]
 python_files = ["test_*.py"]
 python_classes = ["Test*", "*Tests"]
