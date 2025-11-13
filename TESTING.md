@@ -68,7 +68,7 @@ The following files files have been added and tested:
 - tests/test_config.py
 - tests/utils/test_validation.py
 - tests/components/modules/test_incomemode.py
-- tests/managers/test_people.py
+- tests/managers/test_person.py
 - tests/modules/test_accountmode.py
 - tests/modules/test_people.py
 
