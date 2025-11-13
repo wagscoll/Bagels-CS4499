@@ -32,7 +32,7 @@ Each function uses try/except blocks to catch these exceptions and populate an e
 ### InvalidFormDataException
 
 **Purpose:**
->>>Raised when a form field contains invalid or inconsistent data such as:
+>Raised when a form field contains invalid or inconsistent data such as:
 - Missing required fields
 - Numeric values outside allowed min/max bounds
 - Incorrect date formats
@@ -68,7 +68,8 @@ The following files files have been added and tested:
 - tests/test_config.py
 - tests/utils/test_validation.py
 - tests/components/modules/test_incomemode.py
-- tests/managers/test_person.py
-- tests/ADD_THIS_ONE_LATER_!_!
+- tests/managers/test_people.py
+- tests/modules/test_accountmode.py
+- tests/modules/test_people.py
 
 
