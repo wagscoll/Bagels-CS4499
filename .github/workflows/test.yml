@@ -2,7 +2,7 @@ name: Run Tests and Coverage
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "merged-tests" ]
 
 jobs:
   test:
@@ -32,11 +32,11 @@ jobs:
       # Run tests with coverage enabled
       - name: Run tests with coverage
         run: |
-          uv run pytest --cov --cov-report=xml
+          uv run pytest --cov --cov-report=xml:coverage.xml
 
       # Check that coverage meets minimum threshold
       - name: Verify coverage is >= 80%
-        uses: VeryGoodOpenSource/coverage@v1
+        uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: coverage.xml
           min_coverage: 80
