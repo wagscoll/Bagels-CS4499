@@ -32,7 +32,12 @@ jobs:
       # 5. Run only your tests with coverage limited to src/bagels
       - name: Run tests with coverage
         run: |
-          uv run pytest --cov=src/bagels --cov-report=xml:coverage.xml
+          uv run pytest \
+          --cov=src/bagels/config.py \
+          --cov=src/bagels/components/modules/incomemode.py \
+          --cov=src/bagels/components/modules/people.py \
+          --cov=src/bagels/utils/validation.py \  
+          --cov-report=xml:coverage.xml
 
       # 6. Ensure coverage.xml exists before verification
       - name: Verify coverage.xml exists
