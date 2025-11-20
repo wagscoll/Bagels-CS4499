@@ -1,0 +1,42 @@
+name: Run Tests and Coverage
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Install uv (Python package manager)
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      # Install project dependencies
+      - name: Install dependencies with uv
+        run: uv sync
+
+      # Run tests with coverage enabled
+      - name: Run tests with coverage
+        run: |
+          uv run pytest --cov --cov-report=xml
+
+      # Check that coverage meets minimum threshold
+      - name: Verify coverage is >= 80%
+        uses: verygoodtest/coverage@v1
+        with:
+          path: coverage.xml
+          min_coverage: 80
