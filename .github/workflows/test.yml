@@ -8,8 +8,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      PYTHONPATH: src  # ensures Python can import your bagels package
+
     steps:
-      # 1. Checkout code
+      # 1. Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -19,7 +22,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      # 3. Install uv
+      # 3. Install uv (Python package manager)
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -29,35 +32,26 @@ jobs:
       - name: Install dependencies with uv
         run: uv sync
 
-      # 5. Run tests with coverage
+      # 5. Run only selected tests with full bagels coverage
       - name: Run tests with coverage
-        env:
-          PYTHONPATH: src
         run: |
-          # Mock CONFIG in record modal to prevent AttributeError
           uv run pytest \
-            --cov=bagels \
-            --cov-report=xml:coverage.xml \
-            --cov-report=term \
-            --disable-warnings \
             tests/utils/test_validation.py \
             tests/test_config.py \
             tests/components/modules/test_incomemode.py \
             tests/managers/test_person.py \
-            tests/modules/test_people.py
+            tests/modules/test_people.py \
+            --cov=bagels \
+            --cov-report=xml:coverage.xml \
+            --cov-report=term \
+            --cov-branch
 
       # 6. Ensure coverage.xml exists
       - name: Verify coverage.xml exists
         run: test -f coverage.xml
 
-      # 7. Show coverage summary
-      - name: Show coverage summary
-        run: |
-          COVERAGE_PERCENT=$(coverage report | tail -1 | awk '{print $4}')
-          echo "Coverage is $COVERAGE_PERCENT"
-
-      # 8. Verify coverage meets threshold
-      - name: Verify coverage >= 30%
+      # 7. Check that coverage meets minimum threshold
+      - name: Verify coverage is >= 30%
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: coverage.xml
