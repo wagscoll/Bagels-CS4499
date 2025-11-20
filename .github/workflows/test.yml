@@ -9,32 +9,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # 1. Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install Python
+      # 2. Set up Python 3.11
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Install uv (Python package manager)
+      # 3. Install uv (Python package manager)
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      # Install project dependencies
+      # 4. Install project dependencies
       - name: Install dependencies with uv
         run: uv sync
 
-      # Run tests with coverage enabled
+      # 5. Run tests with coverage enabled and generate coverage.xml in repo root
       - name: Run tests with coverage
         run: |
           uv run pytest --cov --cov-report=xml:coverage.xml
 
-      # Check that coverage meets minimum threshold
+      # 6. Debug: list files and show coverage.xml contents
+      - name: Debug coverage file
+        run: |
+          ls -al
+          cat coverage.xml
+
+      # 7. Ensure coverage.xml exists before verification
+      - name: Verify coverage.xml exists
+        run: test -f coverage.xml
+
+      # 8. Check that coverage meets minimum threshold
       - name: Verify coverage is >= 80%
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
