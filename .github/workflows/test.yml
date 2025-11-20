@@ -8,11 +8,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      PYTHONPATH: src  # ensures Python can import your bagels package
-
     steps:
-      # 1. Checkout the repository
+      # 1. Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -32,9 +29,16 @@ jobs:
       - name: Install dependencies with uv
         run: uv sync
 
-      # 5. Run only selected tests with full bagels coverage
-      - name: Run tests with coverage
+      # 5. Run tests with coverage
+      - name: Run selected tests with coverage
         run: |
+          # Ensure the coverage folder exists
+          mkdir -p coverage
+          
+          # Set PYTHONPATH for src folder
+          export PYTHONPATH=src
+          
+          # Run pytest on selected test files with coverage
           uv run pytest \
             tests/utils/test_validation.py \
             tests/test_config.py \
@@ -42,17 +46,12 @@ jobs:
             tests/managers/test_person.py \
             tests/modules/test_people.py \
             --cov=bagels \
-            --cov-report=xml:coverage.xml \
             --cov-report=term \
-            --cov-branch
+            --cov-report=lcov:coverage/lcov.info
 
-      # 6. Ensure coverage.xml exists
-      - name: Verify coverage.xml exists
-        run: test -f coverage.xml
-
-      # 7. Check that coverage meets minimum threshold
-      - name: Verify coverage is >= 30%
+      # 6. Verify coverage meets minimum threshold
+      - name: Verify coverage is >= 80%
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          path: coverage.xml
+          path: coverage/lcov.info
           min_coverage: 80
