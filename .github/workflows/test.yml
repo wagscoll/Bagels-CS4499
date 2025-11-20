@@ -36,7 +36,7 @@ jobs:
 
       # Check that coverage meets minimum threshold
       - name: Verify coverage is >= 80%
-        uses: verygoodtest/coverage@v1
+        uses: VeryGoodOpenSource/coverage@v1
         with:
           path: coverage.xml
           min_coverage: 80
