@@ -29,22 +29,16 @@ jobs:
       - name: Install dependencies with uv
         run: uv sync
 
-      # 5. Run tests with coverage enabled and generate coverage.xml in repo root
+      # 5. Run only your tests with coverage limited to src/bagels
       - name: Run tests with coverage
         run: |
-          uv run pytest --cov --cov-report=xml:coverage.xml
+          uv run pytest --cov=src/bagels --cov-report=xml:coverage.xml
 
-      # 6. Debug: list files and show coverage.xml contents
-      - name: Debug coverage file
-        run: |
-          ls -al
-          cat coverage.xml
-
-      # 7. Ensure coverage.xml exists before verification
+      # 6. Ensure coverage.xml exists before verification
       - name: Verify coverage.xml exists
         run: test -f coverage.xml
 
-      # 8. Check that coverage meets minimum threshold
+      # 7. Check that coverage meets minimum threshold
       - name: Verify coverage is >= 80%
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
