@@ -49,7 +49,7 @@ jobs:
           echo "Coverage is $COVERAGE_PERCENT"
 
       # 8. Check that coverage meets minimum threshold
-      - name: Verify coverage is >= 80%
+      - name: Verify coverage is >= 30%
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: coverage.xml
