@@ -29,23 +29,24 @@ jobs:
       - name: Install dependencies with uv
         run: uv sync
 
-      # 5. Run your tests with coverage
+      # 5. Run only your tests with coverage limited to src/bagels
       - name: Run tests with coverage
         run: |
-          uv run pytest tests/ \
-            --cov=src/bagels/config.py \
-            --cov=src/bagels/components/modules/incomemode.py \
-            --cov=src/bagels/components/modules/people.py \
-            --cov=src/bagels/utils/validation.py \
-            --cov-report=xml:coverage.xml
+          uv run pytest \
+            --cov=bagels \
+            --cov-report=xml:coverage.xml \
+            --cov-report=term \
+            tests/
 
-      # 6. Show coverage summary in logs
-      - name: Show coverage summary
-        run: uv run coverage report
-
-      # 7. Ensure coverage.xml exists
+      # 6. Ensure coverage.xml exists before verification
       - name: Verify coverage.xml exists
         run: test -f coverage.xml
+
+      # 7. Print coverage %
+      - name: Show coverage summary
+        run: |
+          COVERAGE_PERCENT=$(coverage report | tail -1 | awk '{print $4}')
+          echo "Coverage is $COVERAGE_PERCENT"
 
       # 8. Check that coverage meets minimum threshold
       - name: Verify coverage is >= 80%
